@@ -1,0 +1,44 @@
+# ============================================================================
+#  codesmith.sh — dependency manifest
+# ----------------------------------------------------------------------------
+#  This project is a single-file Bash CLI (there is no Python here), so this
+#  file documents the SYSTEM packages the script needs. Install them with your
+#  system package manager — do NOT pip-install this file.
+#
+#    Debian/Ubuntu : sudo apt install qrencode zint zbar-tools imagemagick
+#    Fedora        : sudo dnf install qrencode zint zbar imagemagick
+#    macOS (brew)  : brew install qrencode zint zbar imagemagick
+#
+#  The script probes for each tool at startup, prints these install commands
+#  when something is missing, and degrades gracefully (see README.md).
+# ============================================================================
+
+# ── interpreter ────────────────────────────────────────────────────────────
+bash >= 3.2                  # script interpreter; works on stock macOS bash
+                             # 3.2 and bash 4/5 on Linux (tested 3.2–5.2)
+
+# ── required for QR mode ───────────────────────────────────────────────────
+qrencode >= 4.0              # QR symbol encoder (apt: qrencode / dnf: qrencode
+                             # / brew: qrencode). Version >= 4.0 is needed for
+                             # --fg/--bg colors and --terminal output.
+                             # Tested with 4.1.1.
+
+# ── required for barcode mode ──────────────────────────────────────────────
+zint >= 2.10                 # barcode symbology encoder: EAN-13, UPC-A,
+                             # Code 128, Code 39, ISBN (apt: zint / dnf: zint
+                             # / brew: zint). Tested with 2.15.0.
+
+# ── optional (recommended): roundtrip verification ─────────────────────────
+zbar-tools >= 0.20           # provides `zbarimg`, used to decode every
+                             # generated code back to text and compare it
+                             # with the input (dnf/brew package name: zbar).
+                             # Without it, verification is skipped with a
+                             # notice and codes are still generated.
+                             # Tested with 0.23.93.
+
+# ── optional: logo overlay and caption labels ──────────────────────────────
+imagemagick >= 6.9           # used for --logo compositing, --label captions and
+                             # batch contact-sheet label images. ImageMagick 6
+                             # (`convert`) and 7 (`magick`) are both supported.
+                             # Without it, labels/captions are skipped with a
+                             # warning. Tested with 7.1.1.
